@@ -1,42 +1,49 @@
-import { Produto as ProdutoType } from '../../App'
-import * as S from './styles'
+// src/components/Produto/index.tsx
+import React from 'react'
+import { Produto } from '../../App' // Assumindo que Produto é exportado de App
+import { paraReal } from '../../utils' // Importa de utils
 
-type Props = {
-  produto: ProdutoType
-  aoComprar: (produto: ProdutoType) => void
-  favoritar: (produto: ProdutoType) => void
+type ProdutoComponentProps = {
+  produto: Produto
+  aoComprar: (produto: Produto) => void
+  favoritar: (produto: Produto) => void
   estaNosFavoritos: boolean
 }
 
-export const paraReal = (valor: number) =>
-  new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(
-    valor
-  )
-
 const ProdutoComponent = ({
-  produto,
-  aoComprar,
-  favoritar,
-  estaNosFavoritos
-}: Props) => {
+                            produto,
+                            aoComprar,
+                            favoritar,
+                            estaNosFavoritos
+                          }: ProdutoComponentProps) => {
   return (
-    <S.Produto>
-      <S.Capa>
+    <div className="produto-item">
+      <div className="produto-capa">
         <img src={produto.imagem} alt={produto.nome} />
-      </S.Capa>
-      <S.Titulo>{produto.nome}</S.Titulo>
-      <S.Prices>
+      </div>
+      <h3 className="produto-titulo">{produto.nome}</h3>
+      <p className="produto-prices">
         <strong>{paraReal(produto.preco)}</strong>
-      </S.Prices>
-      <S.BtnComprar onClick={() => favoritar(produto)} type="button">
+      </p>
+      <button
+        onClick={() => favoritar(produto)}
+        type="button"
+        className={`btn-comprar ${
+          estaNosFavoritos ? 'btn-remover-favorito' : 'btn-favoritos'
+        }`}
+      >
         {estaNosFavoritos
           ? '- Remover dos favoritos'
           : '+ Adicionar aos favoritos'}
-      </S.BtnComprar>
-      <S.BtnComprar onClick={() => aoComprar(produto)} type="button">
+      </button>
+      <button
+        onClick={() => aoComprar(produto)}
+        type="button"
+        className="btn-comprar"
+      >
         Adicionar ao carrinho
-      </S.BtnComprar>
-    </S.Produto>
+      </button>
+    </div>
   )
 }
 
