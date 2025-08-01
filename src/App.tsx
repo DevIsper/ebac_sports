@@ -195,7 +195,7 @@ function App() {
   const [produtos, setProdutos] = useState<Produto[]>([])
 
   useEffect(() => {
-    fetch('https://fake-api-tau.vercel.app/api/ebac_sports')
+    fetch('https://ebac-fake-api.vercel.app/api/ebac_sports')
       .then((res) => res.json())
       .then((res) => setProdutos(res))
       .catch((error) => console.error('Erro ao buscar produtos:', error))
