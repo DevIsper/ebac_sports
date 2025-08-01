@@ -1,21 +1,28 @@
-// src/components/Produto/index.tsx
 import React from 'react'
-import { Produto } from '../../App' // Assumindo que Produto é exportado de App
-import { paraReal } from '../../utils' // Importa de utils
+import { useDispatch, useSelector } from 'react-redux'
+import { Produto } from '../../App'
+import { paraReal } from '../../utils'
+import { adicionarAoCarrinho } from '../../store/slices/carrinhoSlice'
+import { favoritar } from '../../store/slices/favoritosSlice'
+import { RootState } from '../../store'
 
 type ProdutoComponentProps = {
   produto: Produto
-  aoComprar: (produto: Produto) => void
-  favoritar: (produto: Produto) => void
-  estaNosFavoritos: boolean
 }
 
-const ProdutoComponent = ({
-                            produto,
-                            aoComprar,
-                            favoritar,
-                            estaNosFavoritos
-                          }: ProdutoComponentProps) => {
+const ProdutoComponent = ({ produto }: ProdutoComponentProps) => {
+  const dispatch = useDispatch()
+  const favoritos = useSelector((state: RootState) => state.favoritos.items)
+  const estaNosFavoritos = favoritos.some((item) => item.id === produto.id)
+
+  const handleAdicionarAoCarrinho = () => {
+    dispatch(adicionarAoCarrinho(produto))
+  }
+
+  const handleFavoritar = () => {
+    dispatch(favoritar(produto))
+  }
+
   return (
     <div className="produto-item">
       <div className="produto-capa">
@@ -26,7 +33,7 @@ const ProdutoComponent = ({
         <strong>{paraReal(produto.preco)}</strong>
       </p>
       <button
-        onClick={() => favoritar(produto)}
+        onClick={handleFavoritar}
         type="button"
         className={`btn-comprar ${
           estaNosFavoritos ? 'btn-remover-favorito' : 'btn-favoritos'
@@ -36,11 +43,7 @@ const ProdutoComponent = ({
           ? '- Remover dos favoritos'
           : '+ Adicionar aos favoritos'}
       </button>
-      <button
-        onClick={() => aoComprar(produto)}
-        type="button"
-        className="btn-comprar"
-      >
+      <button onClick={handleAdicionarAoCarrinho} type="button" className="btn-comprar">
         Adicionar ao carrinho
       </button>
     </div>

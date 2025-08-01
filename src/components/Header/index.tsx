@@ -1,16 +1,14 @@
-// src/components/Header/index.tsx
 import React from 'react'
-import { Produto } from '../../App' // Assumindo que Produto é exportado de App
-import { paraReal } from '../../utils' // Importa de utils
-// Placeholder para cesta.png
-const cesta = '../../assets/cesta.png'
+import { useSelector } from 'react-redux'
+import { paraReal } from '../../utils'
+import { RootState } from '../../store'
 
-type HeaderProps = {
-  itensNoCarrinho: Produto[]
-  favoritos: Produto[]
-}
+const cesta = '/cesta.png'
 
-const Header = ({ itensNoCarrinho, favoritos }: HeaderProps) => {
+const Header = () => {
+  const itensNoCarrinho = useSelector((state: RootState) => state.carrinho.items)
+  const favoritos = useSelector((state: RootState) => state.favoritos.items)
+
   const valorTotal = itensNoCarrinho.reduce((acc, item) => {
     acc += item.preco
     return acc

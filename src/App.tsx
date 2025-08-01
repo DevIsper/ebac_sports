@@ -1,21 +1,12 @@
-// src/App.tsx
 import React, { useEffect, useState } from 'react'
 import Header from './components/Header'
-import ProdutosContainer from './containers/Produtos' // Renomeado para ProdutosContainer
-
-// =============================================================================
-// TYPES
-// =============================================================================
-export type Produto = {
-  id: number
-  nome: string
-  preco: number
-  imagem: string
-}
+import ProdutosContainer from './containers/Produtos'
 
 // =============================================================================
 // CSS INLINE
 // =============================================================================
+// ... (Seu CSS permanece o mesmo) ...
+
 const AppStyles = `
   * {
     margin: 0;
@@ -190,11 +181,18 @@ const AppStyles = `
     list-style: none;
   }
 `
+// =============================================================================
+// TYPES
+// =============================================================================
+export type Produto = {
+  id: number
+  nome: string
+  preco: number
+  imagem: string
+}
 
 function App() {
   const [produtos, setProdutos] = useState<Produto[]>([])
-  const [carrinho, setCarrinho] = useState<Produto[]>([])
-  const [favoritos, setFavoritos] = useState<Produto[]>([])
 
   useEffect(() => {
     fetch('https://fake-api-tau.vercel.app/api/ebac_sports')
@@ -203,34 +201,12 @@ function App() {
       .catch((error) => console.error('Erro ao buscar produtos:', error))
   }, [])
 
-  function adicionarAoCarrinho(produto: Produto) {
-    if (carrinho.find((p) => p.id === produto.id)) {
-      alert('Item já adicionado ao carrinho!')
-    } else {
-      setCarrinho([...carrinho, produto])
-    }
-  }
-
-  function favoritar(produto: Produto) {
-    if (favoritos.find((p) => p.id === produto.id)) {
-      const favoritosSemProduto = favoritos.filter((p) => p.id !== produto.id)
-      setFavoritos(favoritosSemProduto)
-    } else {
-      setFavoritos([...favoritos, produto])
-    }
-  }
-
   return (
     <>
-      <style>{AppStyles}</style> {/* Global styles injected here */}
+      <style>{AppStyles}</style>
       <div className="container">
-        <Header favoritos={favoritos} itensNoCarrinho={carrinho} />
-        <ProdutosContainer
-          produtos={produtos}
-          favoritos={favoritos}
-          favoritar={favoritar}
-          adicionarAoCarrinho={adicionarAoCarrinho}
-        />
+        <Header /> {/* Props removidas */}
+        <ProdutosContainer produtos={produtos} /> {/* Props removidas */}
       </div>
     </>
   )
